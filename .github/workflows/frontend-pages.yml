@@ -15,10 +15,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
+      - name: Checkout repository 🛎️
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -27,22 +27,26 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
+        working-directory: ./frontend
         run: npm install
 
       - name: Build project
+        working-directory: ./frontend
+        env:
+          VITE_API_URL: ${{ secrets.FRONTEND_API_URL }}
         run: npm run build
 
-      - name: Upload artifact
+      - name: Upload production build as artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist  # change to your build folder (like build or dist)
+          path: ./frontend/dist
 
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build-and-deploy
+    needs: build
     steps:
       - name: Deploy to GitHub Pages 🚀
         id: deployment

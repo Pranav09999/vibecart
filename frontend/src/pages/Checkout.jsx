@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { api } from '../api';
 
 const Checkout = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +24,7 @@ const Checkout = () => {
     setError(null);
 
     try {
-      const response = await axios.post('http://localhost:4000/api/checkout');
+      const response = await api.post('/api/checkout');
       setReceipt(response.data.data);
       setShowModal(true);
       setFormData({ name: '', email: '' });

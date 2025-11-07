@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { api } from '../api';
 import ProductCard from '../components/ProductCard';
 
 const Products = () => {
@@ -14,7 +14,7 @@ const Products = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:4000/api/products');
+      const response = await api.get('/api/products');
       setProducts(response.data.data);
       setError(null);
     } catch (err) {
@@ -27,7 +27,7 @@ const Products = () => {
 
   const handleAddToCart = async (productId, qty) => {
     try {
-      await axios.post('http://localhost:4000/api/cart', {
+      await api.post('/api/cart', {
         productId,
         qty
       });

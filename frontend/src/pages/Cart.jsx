@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { api } from '../api';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -16,7 +16,7 @@ const Cart = () => {
   const fetchCart = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:4000/api/cart');
+      const response = await api.get('/api/cart');
       setCartItems(response.data.data);
       setTotal(parseFloat(response.data.total));
       setError(null);
@@ -30,7 +30,7 @@ const Cart = () => {
 
   const handleRemoveItem = async (itemId) => {
     try {
-      await axios.delete(`http://localhost:4000/api/cart/${itemId}`);
+      await api.delete(`/api/cart/${itemId}`);
       fetchCart(); // Refresh cart
     } catch (err) {
       alert('Failed to remove item. Please try again.');
